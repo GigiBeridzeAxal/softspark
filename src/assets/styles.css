@@ -1,64 +1,64 @@
 /* ------------------------------------------------------------------
    Softspark design tokens
-   System: near-white paper, deep ink type, a single ember accent.
-   One typeface (Inter) in three weights. Flat surfaces, hairline rules,
-   one soft shadow reserved for the product frame.
+   System: near-black ground, warm paper type, no accent hue —
+   contrast and scale carry the argument. Newsreader for display,
+   Archivo for body, IBM Plex Mono for labels. Hairline rules,
+   hatched placeholders where imagery will go, zero decoration.
    ------------------------------------------------------------------ */
 
-/* Metric-compatible fallback so text does not reflow when Inter arrives. */
-@font-face {
-  font-family: 'Inter Fallback';
-  src: local('Arial');
-  size-adjust: 107.4%;
-  ascent-override: 90.2%;
-  descent-override: 22.48%;
-  line-gap-override: 0%;
-}
-
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 
-  /* Palette */
-  --paper: #fbfaf7;
-  --paper-rgb: 251 250 247;
-  --paper-0: #fffefc;
-  --paper-2: #f3f1ec;
-  --ink: #141210;
-  --ink-rgb: 20 18 16;
-  --ink-2: #54504a;
-  --ink-3: #6b665e;
-  --ember: #c2410c;
-  --ember-rgb: 194 65 12;
-  --ember-hover: #a8370a;
+  /* Palette — monochrome */
+  --ink: #050506;
+  --ink-rgb: 5 5 6;
+  --paper: #f2f0ec;
+  --paper-rgb: 242 240 236;
 
   /* Semantic */
-  --bg: var(--paper);
-  --surface: var(--paper-2);
-  --surface-raised: var(--paper-0);
-  --text: var(--ink);
-  --text-muted: var(--ink-2);
-  --text-faint: var(--ink-3);
-  --line: rgb(var(--ink-rgb) / 0.1);
-  --line-strong: rgb(var(--ink-rgb) / 0.22);
-  --wash: rgb(var(--ink-rgb) / 0.05);
-  --accent: var(--ember);
-  --on-accent: #ffffff;
-  --shadow-1:
-    0 1px 2px rgb(var(--ink-rgb) / 0.04),
-    0 16px 40px -16px rgb(var(--ink-rgb) / 0.14);
+  --bg: var(--ink);
+  --text: var(--paper);
+  --text-lede: rgb(var(--paper-rgb) / 0.78);
+  --text-muted: rgb(var(--paper-rgb) / 0.62);
+  --text-faint: rgb(var(--paper-rgb) / 0.42);
+  /* Placeholder captions only — decorative, hidden from assistive tech. */
+  --text-ghost: rgb(var(--paper-rgb) / 0.34);
+  --line: rgb(var(--paper-rgb) / 0.12);
+  --line-strong: rgb(var(--paper-rgb) / 0.4);
+  --wash: rgb(var(--paper-rgb) / 0.06);
+
+  /* Every unshot image is a labelled hatch. Two angles: boxes and bands. */
+  --hatch: repeating-linear-gradient(
+    135deg,
+    rgb(var(--paper-rgb) / 0.07) 0 7px,
+    transparent 7px 14px
+  );
+  --hatch-band: repeating-linear-gradient(
+    115deg,
+    rgb(var(--paper-rgb) / 0.055) 0 9px,
+    transparent 9px 18px
+  );
 
   /* Type */
-  --font: 'Inter', 'Inter Fallback', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
-  --text-lg: 1.125rem;
-  --text-lede: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
-  --text-h3: 1.125rem;
-  --text-h2: clamp(1.875rem, 1.45rem + 1.7vw, 2.75rem);
-  --text-h1: clamp(2.625rem, 1.9rem + 3.4vw, 4.5rem);
+  --font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* Rhythm: 4px base, 8px steps */
+  --text-label: 0.6875rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.90625rem;
+  --text-body: 1rem;
+  --text-lede-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+
+  /* Display scale, pinned to the 1280px comp */
+  --display-1: clamp(2.25rem, 1.1rem + 6.75vw, 6.5rem); /* hero */
+  --display-2: clamp(1.875rem, 1.05rem + 3.3vw, 3.25rem); /* statement */
+  --display-3: clamp(1.75rem, 1.15rem + 2.4vw, 2.875rem); /* product band */
+  --display-4: clamp(2.25rem, 1.25rem + 4vw, 4rem); /* closing line */
+  --title: clamp(1.5rem, 1.25rem + 0.9vw, 1.875rem); /* card headings */
+  --stat: clamp(3rem, 1.9rem + 4.6vw, 4.75rem); /* the numbers */
+
+  /* Rhythm */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -67,25 +67,22 @@
   --space-6: 2rem;
   --space-8: 3rem;
   --space-10: 4rem;
-  --section-y: clamp(5rem, 8vw, 7.5rem);
+  --section-y: clamp(3.5rem, 7vw, 5.5rem);
+  --shell: 100rem;
+  --gutter: clamp(1.25rem, 3.4vw, 2.75rem);
+  --nav-h: 4.25rem;
+  --prose: 35rem;
+  --slot-h: clamp(7rem, 11vw, 9.375rem);
 
-  --radius-sm: 6px;
-  --radius: 8px;
-  --radius-lg: 14px;
-  --container: 72rem;
-  --prose: 38rem;
-  --gutter: clamp(1.25rem, 4vw, 2.5rem);
-  --nav-h: 4rem;
-
-  /* Motion: one ease for arrival, one for state changes */
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Motion: one arrival ease, one for state changes */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-std: cubic-bezier(0.4, 0, 0.2, 1);
   --dur-fast: 120ms;
-  --dur: 200ms;
-  --dur-reveal: 700ms;
-  --dur-enter: 900ms;
-  --enter-base: 80ms;
-  --enter-step: 70ms;
+  --dur: 220ms;
+  --dur-reveal: 800ms;
+  --dur-enter: 1000ms;
+  --enter-base: 60ms;
+  --enter-step: 90ms;
 }
 
 /* ---------- Reset ---------- */
@@ -110,12 +107,18 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font);
-  font-size: var(--text-base);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+}
+
+/* The comp is a 1280px canvas; cap the page so it never sprawls. */
+#app {
+  max-width: var(--shell);
+  margin-inline: auto;
 }
 
 img,
@@ -144,29 +147,32 @@ p {
   text-wrap: pretty;
 }
 
+/* Display type is Newsreader at 300; card headings step up to 400. */
 h1,
 h2,
 h3 {
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 300;
   text-wrap: balance;
 }
 
 h1 {
-  font-size: var(--text-h1);
-  line-height: 1.04;
+  font-size: var(--display-1);
+  line-height: 1;
   letter-spacing: -0.03em;
 }
 
 h2 {
-  font-size: var(--text-h2);
+  font-size: var(--display-2);
   line-height: 1.12;
-  letter-spacing: -0.022em;
+  letter-spacing: -0.02em;
 }
 
 h3 {
-  font-size: var(--text-h3);
-  line-height: 1.35;
-  letter-spacing: -0.012em;
+  font-size: var(--title);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
 }
 
 a {
@@ -186,73 +192,91 @@ button {
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--paper);
   outline-offset: 3px;
 }
 
 ::selection {
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--paper);
+  color: var(--ink);
 }
 
 /* ---------- Layout ---------- */
-.container {
-  width: min(100% - 2 * var(--gutter), var(--container));
-  margin-inline: auto;
+.shell {
+  padding-inline: var(--gutter);
 }
 
-/* Sections separate with a hairline; one soft tonal band is used once. */
 .section {
   padding-block: var(--section-y);
   border-top: 1px solid var(--line);
 }
 
-.section--band {
-  background: var(--surface);
-  border-top: 0;
+/* A centred eyebrow + one long serif statement opens a section. */
+.statement {
+  text-align: center;
 }
 
-.section--band + .section {
-  border-top: 0;
+.statement h2 {
+  margin: var(--space-5) auto 0;
+  max-width: 56rem;
 }
 
-.section-head {
-  max-width: var(--prose);
-  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+/* Hairline grid: 1px gaps showing the line colour through the gutters. */
+.grid-rule {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border-block: 1px solid var(--line);
 }
 
-.eyebrow {
-  display: block;
-  font-size: var(--text-xs);
+.grid-rule > * {
+  background: var(--bg);
+}
+
+@media (min-width: 56rem) {
+  .grid-rule--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ---------- Type utilities ---------- */
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
   font-weight: 500;
-  line-height: 1.5;
-  letter-spacing: 0.1em;
+  line-height: 1.4;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--text-faint);
-  margin-bottom: var(--space-4);
+  color: var(--text-muted);
 }
 
 .lede {
-  margin-top: var(--space-5);
-  font-size: var(--text-lg);
+  font-size: var(--text-lede-size);
   line-height: 1.55;
-  color: var(--text-muted);
+  color: var(--text-lede);
   max-width: var(--prose);
 }
 
-/* ---------- Buttons & links ---------- */
+.body-muted {
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+/* ---------- Buttons ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
-  min-height: 3rem;
-  padding: 0 1.25rem;
-  border-radius: var(--radius);
-  font-size: 0.9375rem;
+  min-height: 2.75rem;
+  padding: 0 1.5rem;
+  border: 1px solid transparent;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
   font-weight: 500;
   line-height: 1;
-  letter-spacing: -0.006em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   white-space: nowrap;
   transition:
     background-color var(--dur) var(--ease-std),
@@ -265,73 +289,84 @@ button {
   transform: scale(0.98);
 }
 
-.btn svg {
-  width: 1rem;
-  height: 1rem;
-  flex: none;
+.btn--solid {
+  background: var(--paper);
+  color: var(--ink);
 }
 
-.btn-primary {
-  background: var(--accent);
-  color: var(--on-accent);
-}
-
-.btn-outline {
-  border: 1px solid var(--line-strong);
+.btn--outline {
+  border-color: var(--line-strong);
   color: var(--text);
 }
 
+/* An email reads better in its own case. */
+.btn--lower {
+  text-transform: none;
+  letter-spacing: 0.04em;
+}
+
 @media (hover: hover) {
-  .btn-primary:hover {
-    background: var(--ember-hover);
+  .btn--solid:hover {
+    background: #ffffff;
   }
-  .btn-outline:hover {
-    border-color: var(--ink);
+  .btn--outline:hover {
+    border-color: var(--paper);
     background: var(--wash);
   }
 }
 
-.text-link {
+/* Quiet mono link, for the second action in a pair. */
+.mono-link {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  min-height: 3rem;
-  font-size: 0.9375rem;
+  min-height: 2.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
   font-weight: 500;
-  color: var(--text);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-decoration-color: var(--line-strong);
-  text-underline-offset: 0.3em;
-  border-radius: var(--radius-sm);
-  transition: text-decoration-color var(--dur) var(--ease-std);
-}
-
-.text-link svg {
-  width: 1rem;
-  height: 1rem;
-  flex: none;
-  color: var(--text-faint);
-  transition:
-    transform var(--dur) var(--ease-out),
-    color var(--dur) var(--ease-std);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color var(--dur) var(--ease-std);
 }
 
 @media (hover: hover) {
-  .text-link:hover {
-    text-decoration-color: var(--accent);
-  }
-  .text-link:hover svg {
+  .mono-link:hover {
     color: var(--text);
-    transform: translateX(2px);
   }
+}
+
+/* ---------- Placeholders ---------- */
+/* Every image in the comp is a labelled hatch; nothing is a real asset yet. */
+.slot {
+  display: grid;
+  place-items: center;
+  height: var(--slot-h);
+  border: 1px solid rgb(var(--paper-rgb) / 0.14);
+  background: var(--hatch);
+  font-family: var(--font-mono);
+  font-size: 0.65625rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-ghost);
+  text-align: center;
+  padding: var(--space-3);
+}
+
+.slot-note {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-ghost);
 }
 
 /* ---------- Motion ---------- */
 /* Scroll reveal. Stagger with --d on the element. */
 .reveal {
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(18px);
   transition:
     opacity var(--dur-reveal) var(--ease-out) var(--d, 0ms),
     transform var(--dur-reveal) var(--ease-out) var(--d, 0ms);
@@ -340,6 +375,43 @@ button {
 .reveal.is-visible {
   opacity: 1;
   transform: none;
+}
+
+/* Signature arrival: type rises, rules draw themselves in. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+}
+
+@keyframes rise-sm {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes draw-line {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The hero and product bands pan their hatch slowly, forever. */
+@keyframes pan {
+  from {
+    transform: scale(1.06) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.14) translate3d(-1.5%, -1.5%, 0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
