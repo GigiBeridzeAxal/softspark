@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import SparkMark from './SparkMark.vue'
-import { contact, cta, links, navLinks } from '@/data/site'
+import { contact, links, navLinks } from '@/data/site'
 
 const scrolled = ref(false)
 const open = ref(false)
@@ -37,7 +36,7 @@ onMounted(() => {
   onScroll()
   window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('keydown', onKey)
-  desktop = window.matchMedia('(min-width: 48rem)')
+  desktop = window.matchMedia('(min-width: 56rem)')
   desktop.addEventListener('change', onBreakpoint)
 })
 
@@ -51,47 +50,51 @@ onBeforeUnmount(() => {
 
 <template>
   <header class="nav" :class="{ 'nav--scrolled': scrolled, 'nav--open': open }">
-    <div class="container nav__inner">
-      <a href="#top" class="nav__brand" aria-label="Softspark home" @click="close">
-        <SparkMark :size="26" />
-        <span class="nav__wordmark">Softspark</span>
-      </a>
+    <div class="shell nav__inner">
+      <a href="#top" class="nav__brand" aria-label="Softspark home" @click="close">Softspark</a>
 
       <nav class="nav__links" aria-label="Primary">
         <ul>
           <li v-for="link in navLinks" :key="link.href">
             <a :href="link.href">{{ link.label }}</a>
           </li>
+          <li>
+            <a :href="links.contact" class="nav__contact">Contact</a>
+          </li>
         </ul>
       </nav>
 
-      <div class="nav__actions">
-        <a :href="links.contact" class="btn btn-primary nav__cta">{{ cta.primary }}</a>
-        <button
-          ref="toggle"
-          class="nav__toggle"
-          type="button"
-          :aria-expanded="open"
-          aria-controls="mobile-menu"
-          @click="open = !open"
-        >
-          <span class="visually-hidden">{{ open ? 'Close menu' : 'Open menu' }}</span>
-          <span class="nav__burger" :class="{ 'is-open': open }" aria-hidden="true"><i /><i /></span>
-        </button>
-      </div>
+      <button
+        ref="toggle"
+        class="nav__toggle"
+        type="button"
+        :aria-expanded="open"
+        aria-controls="mobile-menu"
+        @click="open = !open"
+      >
+        <span class="visually-hidden">{{ open ? 'Close menu' : 'Open menu' }}</span>
+        <span class="nav__burger" :class="{ 'is-open': open }" aria-hidden="true"><i /><i /></span>
+      </button>
     </div>
 
     <Transition name="menu">
       <div v-if="open" id="mobile-menu" class="nav__mobile">
-        <nav class="container nav__mobile-inner" aria-label="Mobile primary">
+        <nav class="shell nav__mobile-inner" aria-label="Mobile primary">
           <ul>
-            <li v-for="(link, i) in navLinks" :key="link.href" class="nav__mobile-item" :style="{ '--i': i }">
+            <li
+              v-for="(link, i) in navLinks"
+              :key="link.href"
+              class="nav__mobile-item"
+              :style="{ '--i': i }"
+            >
               <a :href="link.href" @click="close">{{ link.label }}</a>
             </li>
           </ul>
           <div class="nav__mobile-foot nav__mobile-item" :style="{ '--i': navLinks.length }">
-            <a :href="links.contact" class="btn btn-primary" @click="close">{{ cta.primary }}</a>
-            <a :href="links.contact" class="nav__mobile-email" @click="close">{{ contact.email }}</a>
+            <a :href="links.contact" class="btn btn--solid" @click="close">Contact</a>
+            <a :href="links.contact" class="nav__mobile-email" @click="close">
+              {{ contact.email }}
+            </a>
           </div>
         </nav>
       </div>
@@ -100,23 +103,25 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+/* Sits over the hero film, unlit, until the page moves. */
 .nav {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 50;
-  background: rgb(var(--paper-rgb) / 0);
   border-bottom: 1px solid transparent;
   transition:
     background-color var(--dur) var(--ease-std),
     border-color var(--dur) var(--ease-std);
-  animation: nav-in var(--dur-enter) var(--ease-out) both;
+  animation: fade-in var(--dur-enter) var(--ease-out) both;
 }
 
 .nav--scrolled {
-  background: rgb(var(--paper-rgb) / 0.85);
+  background: rgb(var(--ink-rgb) / 0.82);
   border-bottom-color: var(--line);
-  -webkit-backdrop-filter: blur(12px) saturate(1.4);
-  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
 }
 
 .nav--open {
@@ -124,13 +129,9 @@ onBeforeUnmount(() => {
   border-bottom-color: var(--line);
 }
 
-@keyframes nav-in {
-  from {
-    opacity: 0;
-  }
-}
-
 .nav__inner {
+  max-width: var(--shell);
+  margin-inline: auto;
   height: var(--nav-h);
   display: flex;
   align-items: center;
@@ -141,63 +142,60 @@ onBeforeUnmount(() => {
 .nav__brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
-  min-height: 3rem;
-  border-radius: var(--radius-sm);
-}
-
-.nav__wordmark {
-  font-size: 1.0625rem;
+  min-height: 2.75rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .nav__links ul {
   display: flex;
-  gap: var(--space-1);
+  align-items: center;
+  gap: var(--space-5);
 }
 
 .nav__links a {
   display: inline-flex;
   align-items: center;
-  min-height: 2.25rem;
-  padding: 0 var(--space-3);
-  border-radius: var(--radius-sm);
-  font-size: var(--text-sm);
+  min-height: 2.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.71875rem;
   font-weight: 500;
-  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(var(--paper-rgb) / 0.8);
+  transition: color var(--dur) var(--ease-std);
+}
+
+/* One boxed item closes the row. */
+.nav__links .nav__contact {
+  min-height: 2.25rem;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line-strong);
+  color: var(--text);
   transition:
-    color var(--dur) var(--ease-std),
+    border-color var(--dur) var(--ease-std),
     background-color var(--dur) var(--ease-std);
 }
 
 @media (hover: hover) {
   .nav__links a:hover {
     color: var(--text);
+  }
+  .nav__links .nav__contact:hover {
+    border-color: var(--paper);
     background: var(--wash);
   }
 }
 
-.nav__actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.nav__cta {
-  min-height: 2.5rem;
-  padding-inline: 1rem;
-  font-size: var(--text-sm);
-}
-
 .nav__toggle {
   display: none;
-  width: 3rem;
-  height: 3rem;
-  margin-right: calc(-1 * var(--space-3));
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-right: calc(-1 * var(--space-2));
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius);
 }
 
 .nav__burger {
@@ -211,8 +209,7 @@ onBeforeUnmount(() => {
   position: absolute;
   left: 0;
   width: 100%;
-  height: 1.5px;
-  border-radius: 1px;
+  height: 1px;
   background: var(--text);
   transition: transform var(--dur) var(--ease-out);
 }
@@ -243,6 +240,8 @@ onBeforeUnmount(() => {
 }
 
 .nav__mobile-inner {
+  max-width: var(--shell);
+  margin-inline: auto;
   display: flex;
   flex-direction: column;
   min-height: 100%;
@@ -250,23 +249,17 @@ onBeforeUnmount(() => {
 }
 
 .nav__mobile-item {
-  animation: item-in var(--dur-reveal) var(--ease-out) both;
+  animation: rise-sm var(--dur-reveal) var(--ease-out) both;
   animation-delay: calc(40ms + var(--i, 0) * 40ms);
-}
-
-@keyframes item-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
 }
 
 .nav__mobile ul a {
   display: flex;
   align-items: center;
-  min-height: 3.5rem;
-  font-size: 1.5rem;
-  font-weight: 500;
+  min-height: 3.75rem;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 300;
   letter-spacing: -0.02em;
   border-bottom: 1px solid var(--line);
 }
@@ -287,8 +280,8 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   min-height: 2.75rem;
+  font-family: var(--font-mono);
   font-size: var(--text-sm);
-  font-weight: 500;
   color: var(--text-muted);
 }
 
@@ -308,9 +301,8 @@ onBeforeUnmount(() => {
   opacity: 0;
 }
 
-@media (max-width: 47.99rem) {
-  .nav__links,
-  .nav__cta {
+@media (max-width: 55.99rem) {
+  .nav__links {
     display: none;
   }
   .nav__toggle {
@@ -318,7 +310,7 @@ onBeforeUnmount(() => {
   }
 }
 
-@media (min-width: 48rem) {
+@media (min-width: 56rem) {
   .nav__mobile {
     display: none;
   }
