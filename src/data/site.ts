@@ -12,63 +12,79 @@ export interface NavLink {
 export const navLinks: NavLink[] = [
   { label: 'Services', href: '#services' },
   { label: 'Unira', href: '#unira' },
-  { label: 'About', href: '#about' },
+  { label: 'Studio', href: '#studio' },
 ]
 
 export const cta = {
   primary: 'Start a project',
+  secondary: 'What we do',
 } as const
 
 export const hero = {
-  eyebrow: 'Software studio · Georgia',
-  /* The headline is one sentence; `titleEnd` is rendered in a softer tone. */
-  title: 'Web, AI and embedded engineering,',
-  titleEnd: 'built with care.',
+  eyebrow: 'A software studio in Georgia',
+  /* Two lines; `titleEnd` is set in italic and a softer tone. */
+  title: 'Hard problems,',
+  titleEnd: 'handled end to end.',
   lede:
-    'Softspark is a software studio and tech hub in Georgia, the country. We design and build web apps, train and evaluate AI models, and write the software that runs on devices.',
-  secondary: 'See Unira',
+    'Web, machine learning and embedded engineering under one roof — so the seams between them stop being your problem.',
+  /* Placeholder for the footage that will sit behind the hero. */
+  media: 'hero film — studio floor, loop, muted',
 } as const
 
 export interface Service {
   id: string
-  index: string
   title: string
   summary: string
-  points: string[]
+  /* Mono line under the card; drawn from what we actually work in. */
+  meta: string
+  media: string
 }
 
 export const servicesHead = {
-  eyebrow: 'Services',
-  title: 'Three disciplines under one roof.',
-  lede:
-    'Most products touch more than one layer. We staff the web, model and device work together so it is designed as one system.',
+  eyebrow: 'Three disciplines, one team',
+  title:
+    'Most studios hand you a frontend and a phone number. We take the product from the silicon up.',
 } as const
 
 export const services: Service[] = [
   {
     id: 'web',
-    index: '01',
-    title: 'Websites & web apps',
+    title: 'Web & product',
     summary:
-      'Marketing sites, dashboards and full product front-ends on modern frameworks, tuned for speed and long-term maintainability.',
-    points: ['Vue, React and TypeScript', 'Design systems and accessibility', 'Performance, SEO and hosting'],
+      'Full product teams — architecture, interface, infrastructure, and the on-call rotation behind it.',
+    meta: 'Vue · React · TypeScript',
+    media: 'image — 16:9',
   },
   {
     id: 'ai',
-    index: '02',
-    title: 'AI model training & ML consulting',
+    title: 'Applied ML',
     summary:
-      'From dataset strategy to fine-tuning and evaluation, we help teams ship models that behave predictably in production.',
-    points: ['Fine-tuning and evaluation pipelines', 'LLM agents, tooling and orchestration', 'MLOps and deployment guidance'],
+      'Training, evaluation and serving — with the benchmark harness you keep after we leave.',
+    meta: 'Fine-tuning · evals · MLOps',
+    media: 'image — 16:9',
   },
   {
     id: 'embedded',
-    index: '03',
-    title: 'Embedded & firmware-adjacent',
+    title: 'Embedded',
     summary:
-      'Device software, hardware bring-up support and the tooling that connects microcontrollers to the cloud.',
-    points: ['MCU firmware and drivers', 'Flashing, telemetry and device tooling', 'Edge integration with web and AI stacks'],
+      'Firmware, drivers and OTA for devices that have to work in places you cannot reach.',
+    meta: 'MCU firmware · drivers · edge',
+    media: 'image — 16:9',
   },
+]
+
+export interface Stat {
+  value: string
+  caption: string
+}
+
+/* The comp carries its argument in three large numbers. These are the
+   studio's own shape rather than performance figures — replace them here
+   if real, verifiable numbers become available. */
+export const stats: Stat[] = [
+  { value: '3', caption: 'disciplines under one roof' },
+  { value: '1', caption: 'team, one office in Georgia' },
+  { value: '0', caption: 'handoffs between web, model and device' },
 ]
 
 export interface Feature {
@@ -76,52 +92,19 @@ export interface Feature {
   body: string
 }
 
-export type StageState = 'done' | 'active' | 'queued'
-
-export interface Stage {
-  name: string
-  state: StageState
-}
-
 export const unira = {
-  eyebrow: 'Product',
-  title: 'Unira. AI coding teams you can see.',
+  eyebrow: 'Our own product — Unira',
+  title: 'Run a team of AI coding agents where you can actually see them.',
   lede:
-    'Unira is a desktop orchestrator for workflow-driven teams of AI coding CLIs. Define the stages, assign an agent to each, and watch every one work in its own visible session.',
-  primary: 'Download from GitHub',
+    'A desktop orchestrator for workflow-driven teams of AI coding CLIs. Define the stages, assign an agent to each, and watch every one work in its own visible session.',
+  primary: 'Download Unira',
   secondary: 'Release notes',
-  features: [
-    {
-      title: 'Visible by design',
-      body: 'Every agent, prompt and session is on screen. Nothing happens behind a spinner.',
-    },
-    {
-      title: 'Workflow-driven',
-      body: 'Stages like plan, implement, review and test. Unira routes work through them in order.',
-    },
-    {
-      title: 'Local and CLI-native',
-      body: 'Runs on your machine next to your repositories and orchestrates the CLIs you already use.',
-    },
-  ] as Feature[],
-  /* Illustrative workflow shown in the product frame. */
-  frame: {
-    title: 'Unira',
-    workflow: 'release-pipeline',
-    stages: [
-      { name: 'Plan', state: 'done' },
-      { name: 'Implement', state: 'active' },
-      { name: 'Review', state: 'queued' },
-      { name: 'Test', state: 'queued' },
-    ] as Stage[],
-  },
+  media: 'unira app capture',
 } as const
 
 export const about = {
-  eyebrow: 'About',
-  title: 'A small studio in Georgia, working across the whole stack.',
-  lede:
-    'Softspark is based in Georgia, between the Black Sea and the Caucasus. We work with founders, product teams and hardware makers who want thoughtful engineering rather than the fastest possible prototype.',
+  eyebrow: 'The studio',
+  title: 'A small team in Georgia, working across the whole stack.',
   principles: [
     {
       title: 'Craft over churn',
@@ -139,12 +122,11 @@ export const about = {
 } as const
 
 export const contact = {
-  eyebrow: 'Contact',
-  title: 'Tell us what you are building.',
+  title: "Tell us what you're building.",
   lede: 'We reply with an honest read on scope, approach and where Softspark can help.',
   email: 'hello@softspark.ge',
 } as const
 
 export const footer = {
-  blurb: 'Web, AI and embedded engineering from Georgia. Makers of Unira.',
+  place: 'Softspark · Georgia',
 } as const
