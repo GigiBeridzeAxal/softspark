@@ -4,7 +4,7 @@ import { about } from '@/data/site'
 import { useReveal } from '@/composables/useReveal'
 
 const root = ref<HTMLElement | null>(null)
-useReveal(() => root.value)
+useReveal(root)
 </script>
 
 <template>
@@ -21,7 +21,7 @@ useReveal(() => root.value)
           v-for="(p, i) in about.principles"
           :key="p.title"
           class="principle reveal"
-          :style="{ transitionDelay: `${i * 60}ms` }"
+          :style="{ '--d': `${i * 70}ms` }"
         >
           <span class="principle__num">{{ String(i + 1).padStart(2, '0') }}</span>
           <div>
@@ -54,7 +54,7 @@ useReveal(() => root.value)
 
 .principle {
   display: grid;
-  grid-template-columns: 3rem 1fr;
+  grid-template-columns: 3rem minmax(0, 1fr);
   gap: var(--space-4);
   padding-block: var(--space-6);
   border-top: 1px solid var(--line);
@@ -67,9 +67,10 @@ useReveal(() => root.value)
 .principle__num {
   font-size: var(--text-sm);
   font-weight: 500;
+  line-height: 1.5;
   font-variant-numeric: tabular-nums;
   color: var(--text-faint);
-  padding-top: 0.2em;
+  padding-top: 0.125rem;
 }
 
 .principle p {

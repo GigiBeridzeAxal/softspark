@@ -21,7 +21,9 @@ export const cta = {
 
 export const hero = {
   eyebrow: 'Software studio · Georgia',
-  title: 'Web, AI and embedded engineering, built with care.',
+  /* The headline is one sentence; `titleEnd` is rendered in a softer tone. */
+  title: 'Web, AI and embedded engineering,',
+  titleEnd: 'built with care.',
   lede:
     'Softspark is a software studio and tech hub in Georgia, the country. We design and build web apps, train and evaluate AI models, and write the software that runs on devices.',
   secondary: 'See Unira',
@@ -74,6 +76,13 @@ export interface Feature {
   body: string
 }
 
+export type StageState = 'done' | 'active' | 'queued'
+
+export interface Stage {
+  name: string
+  state: StageState
+}
+
 export const unira = {
   eyebrow: 'Product',
   title: 'Unira. AI coding teams you can see.',
@@ -95,13 +104,17 @@ export const unira = {
       body: 'Runs on your machine next to your repositories and orchestrates the CLIs you already use.',
     },
   ] as Feature[],
-  /* Illustrative stages shown in the product frame. */
-  stages: [
-    { name: 'Plan', state: 'done' },
-    { name: 'Implement', state: 'active' },
-    { name: 'Review', state: 'queued' },
-    { name: 'Test', state: 'queued' },
-  ] as { name: string; state: 'done' | 'active' | 'queued' }[],
+  /* Illustrative workflow shown in the product frame. */
+  frame: {
+    title: 'Unira',
+    workflow: 'release-pipeline',
+    stages: [
+      { name: 'Plan', state: 'done' },
+      { name: 'Implement', state: 'active' },
+      { name: 'Review', state: 'queued' },
+      { name: 'Test', state: 'queued' },
+    ] as Stage[],
+  },
 } as const
 
 export const about = {

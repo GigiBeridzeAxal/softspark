@@ -4,7 +4,7 @@ import { services, servicesHead } from '@/data/site'
 import { useReveal } from '@/composables/useReveal'
 
 const root = ref<HTMLElement | null>(null)
-useReveal(() => root.value)
+useReveal(root)
 </script>
 
 <template>
@@ -21,7 +21,7 @@ useReveal(() => root.value)
           v-for="(service, i) in services"
           :key="service.id"
           class="service reveal"
-          :style="{ transitionDelay: `${i * 60}ms` }"
+          :style="{ '--d': `${i * 70}ms` }"
         >
           <span class="service__index">{{ service.index }}</span>
           <h3>{{ service.title }}</h3>
@@ -38,29 +38,25 @@ useReveal(() => root.value)
 <style scoped>
 .services {
   display: grid;
-  border-top: 1px solid var(--line);
-}
-
-@media (min-width: 48rem) {
-  .services {
-    grid-template-columns: repeat(3, 1fr);
-    border-top: 0;
-  }
 }
 
 .service {
-  display: flex;
-  flex-direction: column;
   padding-block: var(--space-6);
-  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line);
 }
 
-@media (min-width: 48rem) {
+@media (min-width: 56rem) {
+  .services {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
   .service {
-    padding: var(--space-2) var(--space-6) 0 0;
-    border-bottom: 0;
-    border-left: 1px solid var(--line);
+    padding: var(--space-2) 0 0;
+    border-top: 0;
+  }
+  .service + .service {
     padding-left: var(--space-5);
+    border-left: 1px solid var(--line);
   }
 }
 
@@ -68,15 +64,16 @@ useReveal(() => root.value)
   display: block;
   font-size: var(--text-sm);
   font-weight: 500;
+  line-height: 1.5;
   font-variant-numeric: tabular-nums;
   color: var(--text-faint);
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-6);
 }
 
 .service__summary {
   margin-top: var(--space-3);
+  max-width: var(--prose);
   color: var(--text-muted);
-  flex: 1;
 }
 
 .service__points {
