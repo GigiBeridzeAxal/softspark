@@ -1,14 +1,21 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { links, unira } from '@/data/site'
+import IconArrow from './IconArrow.vue'
+import { links, unira, type StageState } from '@/data/site'
 import { useReveal } from '@/composables/useReveal'
 
 const root = ref<HTMLElement | null>(null)
-useReveal(() => root.value)
+useReveal(root)
+
+const stateLabel: Record<StageState, string> = {
+  done: 'Done',
+  active: 'Running',
+  queued: 'Queued',
+}
 </script>
 
 <template>
-  <section id="unira" ref="root" class="section" aria-labelledby="unira-title">
+  <section id="unira" ref="root" class="section section--band" aria-labelledby="unira-title">
     <div class="container unira">
       <div class="unira__copy">
         <header class="section-head reveal">
@@ -22,36 +29,40 @@ useReveal(() => root.value)
             v-for="(f, i) in unira.features"
             :key="f.title"
             class="reveal"
-            :style="{ transitionDelay: `${i * 60}ms` }"
+            :style="{ '--d': `${i * 70}ms` }"
           >
             <h3>{{ f.title }}</h3>
             <p>{{ f.body }}</p>
           </li>
         </ul>
 
-        <div class="unira__actions reveal">
+        <div class="unira__actions reveal" style="--d: 140ms">
           <a :href="links.uniraReleases" class="btn btn-primary" target="_blank" rel="noopener">
             {{ unira.primary }}
           </a>
           <a :href="links.uniraReleases" class="text-link" target="_blank" rel="noopener">
             {{ unira.secondary }}
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
+            <IconArrow />
           </a>
         </div>
       </div>
 
-      <figure class="unira__frame reveal" aria-hidden="true">
+      <!-- One quiet product frame. Illustrative; hidden from assistive tech. -->
+      <figure class="unira__frame reveal" style="--d: 120ms" aria-hidden="true">
         <div class="frame__bar">
-          <span class="frame__title">Unira</span>
-          <span class="frame__meta">release-pipeline</span>
+          <span class="frame__title">{{ unira.frame.title }}</span>
+          <span class="frame__meta">{{ unira.frame.workflow }}</span>
         </div>
         <ol class="frame__stages">
-          <li v-for="s in unira.stages" :key="s.name" :class="`is-${s.state}`">
-            <span class="frame__dot" />
+          <li v-for="s in unira.frame.stages" :key="s.name" :class="`is-${s.state}`">
+            <span class="frame__dot">
+              <svg v-if="s.state === 'done'" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75">
+                <path d="M4.5 8.5l2.25 2.25L11.5 5.75" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
             <span class="frame__name">{{ s.name }}</span>
-            <span class="frame__state">{{ s.state }}</span>
+            <span class="frame__state">{{ stateLabel[s.state] }}</span>
+            <span v-if="s.state === 'active'" class="frame__progress"><i /></span>
           </li>
         </ol>
       </figure>
@@ -104,12 +115,12 @@ useReveal(() => root.value)
   margin-top: var(--space-8);
 }
 
-/* One quiet product frame */
+/* ---------- Product frame ---------- */
 .unira__frame {
-  margin: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  background: var(--surface);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-1);
   overflow: hidden;
 }
 
@@ -117,13 +128,15 @@ useReveal(() => root.value)
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--space-4) var(--space-5);
+  min-height: 3rem;
+  padding: 0 var(--space-5);
   border-bottom: 1px solid var(--line);
   font-size: var(--text-sm);
 }
 
 .frame__title {
   font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .frame__meta {
@@ -131,20 +144,19 @@ useReveal(() => root.value)
 }
 
 .frame__stages {
-  margin: 0;
-  padding: var(--space-3) var(--space-5);
-  list-style: none;
+  padding: var(--space-2) var(--space-5) var(--space-3);
 }
 
 .frame__stages li {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 1rem minmax(0, 1fr) auto;
+  column-gap: var(--space-3);
+  row-gap: var(--space-3);
   align-items: center;
-  gap: var(--space-3);
-  min-height: 3.25rem;
+  padding-block: var(--space-4);
   font-size: var(--text-sm);
-  border-bottom: 1px solid var(--line);
   color: var(--text-faint);
+  border-bottom: 1px solid var(--line);
 }
 
 .frame__stages li:last-child {
@@ -164,11 +176,24 @@ useReveal(() => root.value)
   color: var(--text-faint);
 }
 
+.is-active .frame__state {
+  color: var(--accent);
+}
+
 .frame__dot {
-  width: 8px;
-  height: 8px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 1rem;
+  height: 1rem;
   border-radius: 50%;
-  border: 1.5px solid var(--line-strong);
+  border: 1px solid var(--line-strong);
+}
+
+.frame__dot svg {
+  width: 100%;
+  height: 100%;
+  color: var(--paper);
 }
 
 .is-done .frame__dot {
@@ -181,7 +206,49 @@ useReveal(() => root.value)
   border-color: var(--accent);
 }
 
-.is-active .frame__state {
-  color: var(--accent);
+/* Progress under the running stage: fills once when the frame is revealed. */
+.frame__progress {
+  grid-column: 2 / -1;
+  position: relative;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.frame__progress i {
+  position: absolute;
+  inset: 0;
+  width: 62%;
+  border-radius: inherit;
+  background: var(--accent);
+  transform-origin: left;
+}
+
+.unira__frame.is-visible .frame__progress i {
+  animation: fill 1400ms var(--ease-out) 600ms both;
+}
+
+@keyframes fill {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* Live indicator on the running stage: a soft ring, only if motion is welcome. */
+@media (prefers-reduced-motion: no-preference) {
+  .unira__frame.is-visible .is-active .frame__dot {
+    animation: ring 2.4s var(--ease-std) 1.2s infinite;
+  }
+}
+
+@keyframes ring {
+  0% {
+    box-shadow: 0 0 0 0 rgb(var(--ember-rgb) / 0.35);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 7px rgb(var(--ember-rgb) / 0);
+  }
 }
 </style>

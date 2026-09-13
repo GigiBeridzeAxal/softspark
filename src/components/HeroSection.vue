@@ -1,43 +1,72 @@
 <script setup lang="ts">
+import IconArrow from './IconArrow.vue'
 import { cta, hero, links, services } from '@/data/site'
 </script>
 
 <template>
   <section id="top" class="hero" aria-labelledby="hero-title">
     <div class="container">
-      <p class="eyebrow hero__in">{{ hero.eyebrow }}</p>
-      <h1 id="hero-title" class="hero__title hero__in">{{ hero.title }}</h1>
-      <p class="lede hero__in">{{ hero.lede }}</p>
+      <p class="eyebrow hero__in" style="--i: 0">{{ hero.eyebrow }}</p>
+      <h1 id="hero-title" class="hero__title hero__in" style="--i: 1">
+        {{ hero.title }} <span class="hero__title-soft">{{ hero.titleEnd }}</span>
+      </h1>
 
-      <div class="hero__actions hero__in">
-        <a :href="links.contact" class="btn btn-primary">{{ cta.primary }}</a>
-        <a href="#unira" class="text-link">
-          {{ hero.secondary }}
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </a>
+      <div class="hero__grid">
+        <div class="hero__intro">
+          <p class="lede hero__lede hero__in" style="--i: 2">{{ hero.lede }}</p>
+          <div class="hero__actions hero__in" style="--i: 3">
+            <a :href="links.contact" class="btn btn-primary">{{ cta.primary }}</a>
+            <a href="#unira" class="text-link">
+              {{ hero.secondary }}
+              <IconArrow />
+            </a>
+          </div>
+        </div>
+
+        <ul class="hero__index" aria-label="Practice areas">
+          <li v-for="(s, i) in services" :key="s.id" class="hero__in" :style="{ '--i': 4 + i }">
+            <a href="#services">
+              <span class="hero__index-num">{{ s.index }}</span>
+              <span class="hero__index-label">{{ s.title }}</span>
+              <IconArrow />
+            </a>
+          </li>
+        </ul>
       </div>
-
-      <ul class="hero__index hero__in" aria-label="Practice areas">
-        <li v-for="s in services" :key="s.id">
-          <a href="#services">
-            <span class="hero__index-num">{{ s.index }}</span>
-            <span>{{ s.title }}</span>
-          </a>
-        </li>
-      </ul>
     </div>
   </section>
 </template>
 
 <style scoped>
 .hero {
-  padding-block: clamp(4rem, 10vw, 8.5rem) clamp(4rem, 8vw, 6.5rem);
+  padding-block: clamp(4rem, 9vw, 8rem) clamp(4rem, 8vw, 7rem);
 }
 
 .hero__title {
-  max-width: 18ch;
+  max-width: 22ch;
+}
+
+.hero__title-soft {
+  color: var(--text-faint);
+}
+
+.hero__grid {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 4rem);
+  align-items: start;
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+@media (min-width: 64rem) {
+  .hero__grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--space-10);
+  }
+}
+
+.hero__lede {
+  margin-top: 0;
+  font-size: var(--text-lede);
 }
 
 .hero__actions {
@@ -45,44 +74,36 @@ import { cta, hero, links, services } from '@/data/site'
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-3) var(--space-6);
-  margin-top: var(--space-8);
+  margin-top: var(--space-6);
 }
 
+/* Practice index: a numbered list with a rule that draws in. */
 .hero__index {
+  position: relative;
   display: grid;
-  gap: 0;
-  margin-top: clamp(3.5rem, 8vw, 6rem);
-  border-top: 1px solid var(--line);
 }
 
-@media (min-width: 48rem) {
-  .hero__index {
-    grid-template-columns: repeat(3, 1fr);
-  }
+.hero__index::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: var(--line);
+  transform-origin: left;
+  animation: rule-in var(--dur-enter) var(--ease-out) both;
+  animation-delay: calc(var(--enter-base) + 4 * var(--enter-step));
 }
 
 .hero__index a {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-3);
-  min-height: 3rem;
-  padding-block: var(--space-4);
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+  align-items: center;
+  min-height: 3.5rem;
   font-size: var(--text-sm);
   font-weight: 500;
   color: var(--text-muted);
   border-bottom: 1px solid var(--line);
-  transition: color var(--dur) var(--ease);
-}
-
-@media (min-width: 48rem) {
-  .hero__index a {
-    border-bottom: 0;
-    padding-right: var(--space-5);
-  }
-}
-
-.hero__index a:hover {
-  color: var(--text);
+  transition: color var(--dur) var(--ease-std);
 }
 
 .hero__index-num {
@@ -90,31 +111,41 @@ import { cta, hero, links, services } from '@/data/site'
   color: var(--text-faint);
 }
 
-.hero__in {
-  animation: hero-in var(--dur) var(--ease) both;
+.hero__index svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--text-faint);
+  transition:
+    transform var(--dur) var(--ease-out),
+    color var(--dur) var(--ease-std);
 }
 
-.hero__in:nth-child(2) {
-  animation-delay: 40ms;
+@media (hover: hover) {
+  .hero__index a:hover {
+    color: var(--text);
+  }
+  .hero__index a:hover svg {
+    color: var(--text);
+    transform: translateX(2px);
+  }
 }
-.hero__in:nth-child(3) {
-  animation-delay: 80ms;
-}
-.hero__in:nth-child(4) {
-  animation-delay: 120ms;
-}
-.hero__in:nth-child(5) {
-  animation-delay: 160ms;
+
+/* Entrance: one sequence shared with the nav, stepped by --i. */
+.hero__in {
+  animation: hero-in var(--dur-enter) var(--ease-out) both;
+  animation-delay: calc(var(--enter-base) + var(--i, 0) * var(--enter-step));
 }
 
 @keyframes hero-in {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(12px);
   }
-  to {
-    opacity: 1;
-    transform: none;
+}
+
+@keyframes rule-in {
+  from {
+    transform: scaleX(0);
   }
 }
 </style>
