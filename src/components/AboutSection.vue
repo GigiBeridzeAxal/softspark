@@ -8,74 +8,57 @@ useReveal(root)
 </script>
 
 <template>
-  <section id="about" ref="root" class="section" aria-labelledby="about-title">
-    <div class="container about">
-      <header class="section-head about__head reveal">
-        <p class="eyebrow">{{ about.eyebrow }}</p>
-        <h2 id="about-title">{{ about.title }}</h2>
-        <p class="lede">{{ about.lede }}</p>
-      </header>
-
-      <ul class="about__principles">
-        <li
-          v-for="(p, i) in about.principles"
-          :key="p.title"
-          class="principle reveal"
-          :style="{ '--d': `${i * 70}ms` }"
-        >
-          <span class="principle__num">{{ String(i + 1).padStart(2, '0') }}</span>
-          <div>
-            <h3>{{ p.title }}</h3>
-            <p>{{ p.body }}</p>
-          </div>
-        </li>
-      </ul>
+  <section id="studio" ref="root" class="studio" aria-labelledby="studio-title">
+    <div class="shell statement studio__head reveal">
+      <p class="label">{{ about.eyebrow }}</p>
+      <h2 id="studio-title">{{ about.title }}</h2>
     </div>
+
+    <ul class="grid-rule grid-rule--3 studio__grid">
+      <li
+        v-for="(principle, i) in about.principles"
+        :key="principle.title"
+        class="principle reveal"
+        :style="{ '--d': `${i * 90}ms` }"
+      >
+        <span class="label principle__num">{{ String(i + 1).padStart(2, '0') }}</span>
+        <h3>{{ principle.title }}</h3>
+        <p class="body-muted principle__body">{{ principle.body }}</p>
+      </li>
+    </ul>
   </section>
 </template>
 
 <style scoped>
-.about {
-  display: grid;
-  gap: clamp(2.5rem, 5vw, 5rem);
-}
-
-@media (min-width: 64rem) {
-  .about {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-    align-items: start;
-  }
-  .about__head {
-    position: sticky;
-    top: calc(var(--nav-h) + 3rem);
-    margin-bottom: 0;
-  }
-}
-
-.principle {
-  display: grid;
-  grid-template-columns: 3rem minmax(0, 1fr);
-  gap: var(--space-4);
-  padding-block: var(--space-6);
+.studio {
+  padding-top: var(--section-y);
   border-top: 1px solid var(--line);
 }
 
-.principle:last-child {
-  border-bottom: 1px solid var(--line);
+.studio__head h2 {
+  max-width: 44rem;
+}
+
+.studio__grid {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.principle {
+  padding: clamp(1.5rem, 2.6vw, 2.125rem) clamp(1.25rem, 2.4vw, 1.875rem)
+    clamp(1.75rem, 2.8vw, 2.25rem);
 }
 
 .principle__num {
-  font-size: var(--text-sm);
-  font-weight: 500;
-  line-height: 1.5;
-  font-variant-numeric: tabular-nums;
+  display: block;
   color: var(--text-faint);
-  padding-top: 0.125rem;
+  font-variant-numeric: tabular-nums;
 }
 
-.principle p {
+.principle h3 {
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+.principle__body {
   margin-top: var(--space-2);
-  color: var(--text-muted);
-  max-width: 32rem;
 }
 </style>

@@ -1,37 +1,32 @@
 <script setup lang="ts">
-import IconArrow from './IconArrow.vue'
-import { cta, hero, links, services } from '@/data/site'
+import { cta, hero, links } from '@/data/site'
 </script>
 
 <template>
   <section id="top" class="hero" aria-labelledby="hero-title">
-    <div class="container">
-      <p class="eyebrow hero__in" style="--i: 0">{{ hero.eyebrow }}</p>
-      <h1 id="hero-title" class="hero__title hero__in" style="--i: 1">
-        {{ hero.title }} <span class="hero__title-soft">{{ hero.titleEnd }}</span>
+    <!-- Stand-in for the hero film: a panning hatch under a scrim. -->
+    <div class="hero__film" aria-hidden="true">
+      <div class="hero__hatch"></div>
+      <div class="hero__scrim"></div>
+      <p class="hero__film-note slot-note">{{ hero.media }}</p>
+    </div>
+
+    <div class="shell hero__inner">
+      <p class="label hero__eyebrow">{{ hero.eyebrow }}</p>
+
+      <h1 id="hero-title" class="hero__title">
+        <span>{{ hero.title }}</span>
+        <em>{{ hero.titleEnd }}</em>
       </h1>
 
-      <div class="hero__grid">
-        <div class="hero__intro">
-          <p class="lede hero__lede hero__in" style="--i: 2">{{ hero.lede }}</p>
-          <div class="hero__actions hero__in" style="--i: 3">
-            <a :href="links.contact" class="btn btn-primary">{{ cta.primary }}</a>
-            <a href="#unira" class="text-link">
-              {{ hero.secondary }}
-              <IconArrow />
-            </a>
-          </div>
-        </div>
+      <div class="hero__rule" aria-hidden="true"></div>
 
-        <ul class="hero__index" aria-label="Practice areas">
-          <li v-for="(s, i) in services" :key="s.id" class="hero__in" :style="{ '--i': 4 + i }">
-            <a href="#services">
-              <span class="hero__index-num">{{ s.index }}</span>
-              <span class="hero__index-label">{{ s.title }}</span>
-              <IconArrow />
-            </a>
-          </li>
-        </ul>
+      <div class="hero__foot">
+        <p class="lede hero__lede">{{ hero.lede }}</p>
+        <div class="hero__actions">
+          <a :href="links.contact" class="btn btn--solid">{{ cta.primary }}</a>
+          <a href="#services" class="btn btn--outline">{{ cta.secondary }}</a>
+        </div>
       </div>
     </div>
   </section>
@@ -39,113 +34,125 @@ import { cta, hero, links, services } from '@/data/site'
 
 <style scoped>
 .hero {
-  padding-block: clamp(4rem, 9vw, 8rem) clamp(4rem, 8vw, 7rem);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: clamp(32rem, 54vw, 41.25rem);
+  overflow: hidden;
+  padding-block: calc(var(--nav-h) + var(--space-8)) clamp(2.5rem, 4vw, 3rem);
+}
+
+.hero__film {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__hatch {
+  position: absolute;
+  inset: 0;
+  background: var(--hatch-band);
+  animation: pan 24s ease-in-out infinite alternate;
+}
+
+/* Lifts the type off the film and lands the section in solid ink. */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    var(--ink) 4%,
+    rgb(var(--ink-rgb) / 0.35) 55%,
+    rgb(var(--ink-rgb) / 0.7)
+  );
+}
+
+.hero__film-note {
+  position: absolute;
+  top: calc(var(--nav-h) + var(--space-5));
+  right: var(--gutter);
+  max-width: 22rem;
+  text-align: right;
+}
+
+.hero__inner {
+  position: relative;
 }
 
 .hero__title {
+  margin-top: var(--space-5);
   max-width: 22ch;
+  animation: rise var(--dur-enter) var(--ease-out) both;
 }
 
-.hero__title-soft {
-  color: var(--text-faint);
+.hero__title span,
+.hero__title em {
+  display: block;
 }
 
-.hero__grid {
-  display: grid;
-  gap: clamp(2.5rem, 6vw, 4rem);
-  align-items: start;
-  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+.hero__title em {
+  font-style: italic;
+  color: var(--text-muted);
 }
 
-@media (min-width: 64rem) {
-  .hero__grid {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    gap: var(--space-10);
-  }
+/* The rule draws itself in under the headline. */
+.hero__rule {
+  height: 1px;
+  margin-block: clamp(1.25rem, 2.6vw, 2.125rem) clamp(1rem, 1.7vw, 1.375rem);
+  background: rgb(var(--paper-rgb) / 0.3);
+  transform-origin: left;
+  animation: draw-line 1200ms 300ms var(--ease-out) both;
+}
+
+.hero__foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
 }
 
 .hero__lede {
-  margin-top: 0;
-  font-size: var(--text-lede);
+  max-width: 35rem;
 }
 
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3) var(--space-6);
-  margin-top: var(--space-6);
+  gap: var(--space-3);
 }
 
-/* Practice index: a numbered list with a rule that draws in. */
-.hero__index {
-  position: relative;
-  display: grid;
+/* Everything but the headline arrives on one stepped sequence. */
+.hero__eyebrow,
+.hero__lede,
+.hero__actions {
+  animation: rise-sm var(--dur-enter) var(--ease-out) both;
 }
 
-.hero__index::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 1px;
-  background: var(--line);
-  transform-origin: left;
-  animation: rule-in var(--dur-enter) var(--ease-out) both;
+.hero__eyebrow {
+  animation-delay: var(--enter-base);
+}
+.hero__lede {
   animation-delay: calc(var(--enter-base) + 4 * var(--enter-step));
 }
-
-.hero__index a {
-  display: grid;
-  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
-  align-items: center;
-  min-height: 3.5rem;
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--text-muted);
-  border-bottom: 1px solid var(--line);
-  transition: color var(--dur) var(--ease-std);
+.hero__actions {
+  animation-delay: calc(var(--enter-base) + 5 * var(--enter-step));
 }
 
-.hero__index-num {
-  font-variant-numeric: tabular-nums;
-  color: var(--text-faint);
-}
-
-.hero__index svg {
-  width: 1rem;
-  height: 1rem;
-  color: var(--text-faint);
-  transition:
-    transform var(--dur) var(--ease-out),
-    color var(--dur) var(--ease-std);
-}
-
-@media (hover: hover) {
-  .hero__index a:hover {
-    color: var(--text);
+@media (min-width: 56rem) {
+  .hero__foot {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-10);
   }
-  .hero__index a:hover svg {
-    color: var(--text);
-    transform: translateX(2px);
+  .hero__actions {
+    flex: none;
+    padding-bottom: 0.25rem;
   }
 }
 
-/* Entrance: one sequence shared with the nav, stepped by --i. */
-.hero__in {
-  animation: hero-in var(--dur-enter) var(--ease-out) both;
-  animation-delay: calc(var(--enter-base) + var(--i, 0) * var(--enter-step));
-}
-
-@keyframes hero-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-}
-
-@keyframes rule-in {
-  from {
-    transform: scaleX(0);
+@media (max-width: 47.99rem) {
+  .hero__film-note {
+    display: none;
   }
 }
 </style>

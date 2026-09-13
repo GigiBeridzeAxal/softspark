@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { contact, cta, links } from '@/data/site'
+import { contact, links } from '@/data/site'
 import { useReveal } from '@/composables/useReveal'
 
 const root = ref<HTMLElement | null>(null)
@@ -8,47 +8,40 @@ useReveal(root)
 </script>
 
 <template>
-  <section ref="root" class="section cta" aria-labelledby="cta-title">
-    <div class="container cta__inner">
-      <div class="cta__copy reveal">
-        <p class="eyebrow">{{ contact.eyebrow }}</p>
-        <h2 id="cta-title">{{ contact.title }}</h2>
-        <p class="lede">{{ contact.lede }}</p>
-      </div>
-      <div class="cta__actions reveal" style="--d: 100ms">
-        <a :href="links.contact" class="btn btn-primary">{{ cta.primary }}</a>
-        <a :href="links.contact" class="text-link">{{ contact.email }}</a>
-      </div>
+  <section ref="root" class="cta" aria-labelledby="cta-title">
+    <div class="shell cta__inner reveal">
+      <h2 id="cta-title" class="cta__title">{{ contact.title }}</h2>
+      <p class="lede cta__lede">{{ contact.lede }}</p>
+      <a :href="links.contact" class="btn btn--solid btn--lower cta__email">{{ contact.email }}</a>
     </div>
   </section>
 </template>
 
 <style scoped>
+.cta {
+  padding-top: clamp(4rem, 7.2vw, 5.625rem);
+  border-top: 1px solid var(--line);
+}
+
 .cta__inner {
-  display: grid;
-  gap: var(--space-6);
+  text-align: center;
 }
 
-@media (min-width: 56rem) {
-  .cta__inner {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: var(--space-10);
-  }
+.cta__title {
+  font-size: var(--display-4);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  max-width: 30ch;
+  margin-inline: auto;
 }
 
-.cta__copy {
-  max-width: var(--prose);
+.cta__lede {
+  margin: var(--space-5) auto 0;
+  max-width: 32rem;
 }
 
-.cta__copy .lede {
-  margin-top: var(--space-4);
-}
-
-.cta__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3) var(--space-6);
+.cta__email {
+  margin-top: clamp(1.5rem, 2.6vw, 2rem);
+  padding-inline: 1.875rem;
 }
 </style>
