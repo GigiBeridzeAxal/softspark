@@ -11,7 +11,7 @@ import SiteFooter from './components/SiteFooter.vue'
 <template>
   <a href="#main" class="skip-link">Skip to content</a>
   <SiteNav />
-  <main id="main" class="grain">
+  <main id="main">
     <HeroSection />
     <ServicesSection />
     <UniraSection />
@@ -27,11 +27,11 @@ import SiteFooter from './components/SiteFooter.vue'
   top: -100%;
   left: 1rem;
   z-index: 100;
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-pill);
-  background: var(--accent);
-  color: var(--on-accent);
-  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 500;
 }
 
 .skip-link:focus {
