@@ -53,7 +53,8 @@ The dev server prints a local URL (usually `http://localhost:5173`).
 │   │   ├── AboutSection.vue
 │   │   ├── CtaBand.vue
 │   │   ├── SiteFooter.vue
-│   │   └── SparkMark.vue      # Logo mark
+│   │   ├── SparkMark.vue      # Logo mark
+│   │   └── IconArrow.vue      # Shared arrow glyph for links
 │   ├── composables/
 │   │   └── useReveal.ts       # IntersectionObserver scroll-reveal
 │   └── data/
@@ -68,16 +69,31 @@ The dev server prints a local URL (usually `http://localhost:5173`).
 Design tokens live in `src/assets/styles.css` under `:root`. The system is deliberately small:
 
 - **Palette:** near-white paper background (`--paper`), deep ink text (`--ink`) and a single ember
-  accent (`--ember`, used for the primary button, the active state in the Unira frame and focus
-  rings). Borders are 1px hairlines at low alpha; surfaces are flat.
-- **Type:** Inter only, in three weights (400, 500, 600), loaded from Google Fonts with system
-  fallbacks. Headings use weight contrast and tight tracking rather than a second family.
-- **Rhythm:** sections use `--section-y` (80–120px) and a `--prose` measure of 38rem for ledes.
-- **Motion:** 300ms fade/slide on scroll-reveal and hero entrance only, disabled under
-  `prefers-reduced-motion`.
+  accent (`--ember`, used for the primary button, the running stage in the Unira frame, list
+  bullets and focus rings). `--paper-2` is a soft tonal band and `--paper-0` a raised surface.
+  Borders are 1px hairlines at low alpha. Surfaces are flat except for one soft shadow
+  (`--shadow-1`) reserved for the Unira product frame.
+- **Type:** Inter only, in three weights (400, 500, 600), loaded from Google Fonts. A
+  metric-matched `Inter Fallback` face (Arial with `size-adjust`) prevents reflow while Inter
+  loads. Headings use weight contrast and tight tracking rather than a second family; the hero
+  headline ends in a softer tone for hierarchy.
+- **Rhythm:** a 4px base with 8px steps (`--space-*`), sections on `--section-y` (80–120px) and a
+  `--prose` measure of 38rem for ledes.
+- **Separators:** sections are divided by hairlines. The Unira section is the single soft tonal
+  band, so no rule is drawn on either side of it.
+- **Motion:** two eases (`--ease-out` for arrival, `--ease-std` for state changes). Scroll reveal
+  is a 700ms fade and 16px rise, staggered with a `--d` custom property. The nav and hero share
+  one entrance sequence stepped by `--i`. Buttons darken on hover and scale to 0.98 on press;
+  arrow links nudge 2px. The Unira frame fills its progress bar once when revealed and keeps a
+  quiet ring on the running stage. Under `prefers-reduced-motion: reduce` every animation and
+  transition resolves to its final state instantly and nothing loops.
+- **Mobile:** tap targets are 44px or larger on touch devices, the menu is a full-height sheet
+  with staggered items that locks page scroll while open, and the nav keeps a constant height so
+  its scrolled state never shifts layout.
 
-Each section carries one idea: hero (who, what, one CTA), services (three pillars), Unira
-(product spotlight with one quiet frame), about (studio principles), contact band, footer.
+Each section carries one idea: hero (who, what, one CTA, practice index), services (three
+pillars), Unira (product spotlight with one quiet frame), about (studio principles), contact,
+footer.
 
 Section content (service descriptions, Unira feature list, about principles, external links) is
 kept in `src/data/site.ts` so copy changes don't require touching component markup.

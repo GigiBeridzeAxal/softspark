@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import SparkMark from './SparkMark.vue'
-import { cta, links, navLinks } from '@/data/site'
+import { contact, cta, links, navLinks } from '@/data/site'
 
 const scrolled = ref(false)
 const open = ref(false)
+const toggle = ref<HTMLButtonElement | null>(null)
+
+let desktop: MediaQueryList | null = null
 
 function onScroll() {
-  scrolled.value = window.scrollY > 8
+  scrolled.value = window.scrollY > 4
 }
 
 function close() {
@@ -15,23 +18,39 @@ function close() {
 }
 
 function onKey(e: KeyboardEvent) {
-  if (e.key === 'Escape') close()
+  if (e.key === 'Escape' && open.value) {
+    close()
+    toggle.value?.focus()
+  }
 }
+
+function onBreakpoint(e: MediaQueryListEvent) {
+  if (e.matches) close()
+}
+
+/* The mobile sheet covers the viewport, so lock page scroll while it is open. */
+watch(open, (isOpen) => {
+  document.documentElement.classList.toggle('is-locked', isOpen)
+})
 
 onMounted(() => {
   onScroll()
   window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('keydown', onKey)
+  desktop = window.matchMedia('(min-width: 48rem)')
+  desktop.addEventListener('change', onBreakpoint)
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', onScroll)
   window.removeEventListener('keydown', onKey)
+  desktop?.removeEventListener('change', onBreakpoint)
+  document.documentElement.classList.remove('is-locked')
 })
 </script>
 
 <template>
-  <header class="nav" :class="{ 'nav--scrolled': scrolled || open }">
+  <header class="nav" :class="{ 'nav--scrolled': scrolled, 'nav--open': open }">
     <div class="container nav__inner">
       <a href="#top" class="nav__brand" aria-label="Softspark home" @click="close">
         <SparkMark :size="26" />
@@ -49,6 +68,7 @@ onBeforeUnmount(() => {
       <div class="nav__actions">
         <a :href="links.contact" class="btn btn-primary nav__cta">{{ cta.primary }}</a>
         <button
+          ref="toggle"
           class="nav__toggle"
           type="button"
           :aria-expanded="open"
@@ -63,13 +83,16 @@ onBeforeUnmount(() => {
 
     <Transition name="menu">
       <div v-if="open" id="mobile-menu" class="nav__mobile">
-        <nav class="container" aria-label="Mobile primary">
+        <nav class="container nav__mobile-inner" aria-label="Mobile primary">
           <ul>
-            <li v-for="link in navLinks" :key="link.href">
+            <li v-for="(link, i) in navLinks" :key="link.href" class="nav__mobile-item" :style="{ '--i': i }">
               <a :href="link.href" @click="close">{{ link.label }}</a>
             </li>
           </ul>
-          <a :href="links.contact" class="btn btn-primary" @click="close">{{ cta.primary }}</a>
+          <div class="nav__mobile-foot nav__mobile-item" :style="{ '--i': navLinks.length }">
+            <a :href="links.contact" class="btn btn-primary" @click="close">{{ cta.primary }}</a>
+            <a :href="links.contact" class="nav__mobile-email" @click="close">{{ contact.email }}</a>
+          </div>
         </nav>
       </div>
     </Transition>
@@ -81,13 +104,30 @@ onBeforeUnmount(() => {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--bg);
+  background: rgb(var(--paper-rgb) / 0);
   border-bottom: 1px solid transparent;
-  transition: border-color var(--dur) var(--ease);
+  transition:
+    background-color var(--dur) var(--ease-std),
+    border-color var(--dur) var(--ease-std);
+  animation: nav-in var(--dur-enter) var(--ease-out) both;
 }
 
 .nav--scrolled {
+  background: rgb(var(--paper-rgb) / 0.85);
   border-bottom-color: var(--line);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  backdrop-filter: blur(12px) saturate(1.4);
+}
+
+.nav--open {
+  background: var(--bg);
+  border-bottom-color: var(--line);
+}
+
+@keyframes nav-in {
+  from {
+    opacity: 0;
+  }
 }
 
 .nav__inner {
@@ -103,6 +143,7 @@ onBeforeUnmount(() => {
   align-items: center;
   gap: var(--space-3);
   min-height: 3rem;
+  border-radius: var(--radius-sm);
 }
 
 .nav__wordmark {
@@ -119,16 +160,22 @@ onBeforeUnmount(() => {
 .nav__links a {
   display: inline-flex;
   align-items: center;
-  min-height: 3rem;
-  padding: 0 0.875rem;
+  min-height: 2.25rem;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
   font-size: var(--text-sm);
   font-weight: 500;
   color: var(--text-muted);
-  transition: color var(--dur) var(--ease);
+  transition:
+    color var(--dur) var(--ease-std),
+    background-color var(--dur) var(--ease-std);
 }
 
-.nav__links a:hover {
-  color: var(--text);
+@media (hover: hover) {
+  .nav__links a:hover {
+    color: var(--text);
+    background: var(--wash);
+  }
 }
 
 .nav__actions {
@@ -147,6 +194,7 @@ onBeforeUnmount(() => {
   display: none;
   width: 3rem;
   height: 3rem;
+  margin-right: calc(-1 * var(--space-3));
   align-items: center;
   justify-content: center;
   border-radius: var(--radius);
@@ -155,7 +203,7 @@ onBeforeUnmount(() => {
 .nav__burger {
   position: relative;
   width: 18px;
-  height: 10px;
+  height: 12px;
   display: block;
 }
 
@@ -164,15 +212,16 @@ onBeforeUnmount(() => {
   left: 0;
   width: 100%;
   height: 1.5px;
+  border-radius: 1px;
   background: var(--text);
-  transition: transform var(--dur) var(--ease);
+  transition: transform var(--dur) var(--ease-out);
 }
 
 .nav__burger i:nth-child(1) {
-  top: 0;
+  top: 1px;
 }
 .nav__burger i:nth-child(2) {
-  top: 8px;
+  top: 9px;
 }
 
 .nav__burger.is-open i:nth-child(1) {
@@ -182,43 +231,81 @@ onBeforeUnmount(() => {
   transform: translateY(-4px) rotate(-45deg);
 }
 
+/* Mobile sheet: fills the viewport below the bar, items stagger in. */
 .nav__mobile {
   position: absolute;
   inset: 100% 0 auto 0;
+  height: calc(100vh - var(--nav-h));
+  height: calc(100dvh - var(--nav-h));
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background: var(--bg);
-  border-bottom: 1px solid var(--line);
-  padding-block: var(--space-4) var(--space-6);
 }
 
-.nav__mobile ul {
+.nav__mobile-inner {
   display: flex;
   flex-direction: column;
-  margin-bottom: var(--space-5);
+  min-height: 100%;
+  padding-block: var(--space-2) var(--space-6);
+}
+
+.nav__mobile-item {
+  animation: item-in var(--dur-reveal) var(--ease-out) both;
+  animation-delay: calc(40ms + var(--i, 0) * 40ms);
+}
+
+@keyframes item-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
 
 .nav__mobile ul a {
   display: flex;
   align-items: center;
-  min-height: 3rem;
-  font-size: var(--text-lg);
+  min-height: 3.5rem;
+  font-size: 1.5rem;
   font-weight: 500;
+  letter-spacing: -0.02em;
   border-bottom: 1px solid var(--line);
 }
 
-.nav__mobile .btn {
+.nav__mobile-foot {
+  margin-top: auto;
+  padding-top: var(--space-8);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.nav__mobile-foot .btn {
   width: 100%;
 }
 
-.menu-enter-active,
-.menu-leave-active {
-  transition:
-    opacity var(--dur) var(--ease),
-    transform var(--dur) var(--ease);
+.nav__mobile-email {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-muted);
 }
-.menu-enter-from,
+
+.menu-enter-active {
+  transition:
+    opacity var(--dur) var(--ease-std),
+    transform var(--dur-reveal) var(--ease-out);
+}
+.menu-leave-active {
+  transition: opacity var(--dur-fast) var(--ease-std);
+}
+.menu-enter-from {
+  opacity: 0;
+  transform: translateY(-8px);
+}
 .menu-leave-to {
   opacity: 0;
-  transform: translateY(-6px);
 }
 
 @media (max-width: 47.99rem) {
@@ -228,6 +315,12 @@ onBeforeUnmount(() => {
   }
   .nav__toggle {
     display: inline-flex;
+  }
+}
+
+@media (min-width: 48rem) {
+  .nav__mobile {
+    display: none;
   }
 }
 </style>
