@@ -8,95 +8,57 @@ useReveal(root)
 </script>
 
 <template>
-  <section id="services" ref="root" class="section" aria-labelledby="services-title">
-    <div class="container">
-      <header class="section-head reveal">
-        <p class="eyebrow">{{ servicesHead.eyebrow }}</p>
-        <h2 id="services-title">{{ servicesHead.title }}</h2>
-        <p class="lede">{{ servicesHead.lede }}</p>
-      </header>
-
-      <ul class="services">
-        <li
-          v-for="(service, i) in services"
-          :key="service.id"
-          class="service reveal"
-          :style="{ '--d': `${i * 70}ms` }"
-        >
-          <span class="service__index">{{ service.index }}</span>
-          <h3>{{ service.title }}</h3>
-          <p class="service__summary">{{ service.summary }}</p>
-          <ul class="service__points">
-            <li v-for="point in service.points" :key="point">{{ point }}</li>
-          </ul>
-        </li>
-      </ul>
+  <section id="services" ref="root" class="services" aria-labelledby="services-title">
+    <div class="shell statement services__head reveal">
+      <p class="label">{{ servicesHead.eyebrow }}</p>
+      <h2 id="services-title">{{ servicesHead.title }}</h2>
     </div>
+
+    <ul class="grid-rule grid-rule--3 services__grid">
+      <li
+        v-for="(service, i) in services"
+        :key="service.id"
+        class="discipline reveal"
+        :style="{ '--d': `${i * 90}ms` }"
+      >
+        <div class="slot" aria-hidden="true">{{ service.media }}</div>
+        <h3>{{ service.title }}</h3>
+        <p class="body-muted discipline__summary">{{ service.summary }}</p>
+        <p class="label discipline__meta">{{ service.meta }}</p>
+      </li>
+    </ul>
   </section>
 </template>
 
 <style scoped>
 .services {
-  display: grid;
+  padding-top: var(--section-y);
+  border-top: 1px solid rgb(var(--paper-rgb) / 0.1);
 }
 
-.service {
-  padding-block: var(--space-6);
-  border-top: 1px solid var(--line);
+.services__head h2 {
+  max-width: 56rem;
 }
 
-@media (min-width: 56rem) {
-  .services {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-6);
-  }
-  .service {
-    padding: var(--space-2) 0 0;
-    border-top: 0;
-  }
-  .service + .service {
-    padding-left: var(--space-5);
-    border-left: 1px solid var(--line);
-  }
+.services__grid {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
 }
 
-.service__index {
-  display: block;
-  font-size: var(--text-sm);
-  font-weight: 500;
-  line-height: 1.5;
-  font-variant-numeric: tabular-nums;
-  color: var(--text-faint);
-  margin-bottom: var(--space-6);
+.discipline {
+  padding: clamp(1.5rem, 2.6vw, 2.125rem) clamp(1.25rem, 2.4vw, 1.875rem)
+    clamp(1.75rem, 2.8vw, 2.25rem);
 }
 
-.service__summary {
-  margin-top: var(--space-3);
-  max-width: var(--prose);
-  color: var(--text-muted);
-}
-
-.service__points {
+.discipline h3 {
   margin-top: var(--space-5);
-  display: grid;
-  gap: var(--space-2);
-  font-size: var(--text-sm);
-  font-weight: 500;
 }
 
-.service__points li {
-  display: flex;
-  gap: var(--space-3);
-  align-items: baseline;
+.discipline__summary {
+  margin-top: var(--space-2);
 }
 
-.service__points li::before {
-  content: '';
-  flex: none;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--accent);
-  transform: translateY(-2px);
+.discipline__meta {
+  margin-top: var(--space-5);
+  color: var(--text-faint);
 }
 </style>
