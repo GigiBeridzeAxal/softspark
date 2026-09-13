@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SparkMark from './SparkMark.vue'
-import { links, navLinks } from '@/data/site'
+import { footer, links, navLinks } from '@/data/site'
 
 const year = new Date().getFullYear()
 </script>
@@ -10,10 +10,10 @@ const year = new Date().getFullYear()
     <div class="container footer__inner">
       <div class="footer__brand">
         <a href="#top" class="footer__logo" aria-label="Back to top">
-          <SparkMark :size="26" />
+          <SparkMark :size="24" />
           <span>Softspark</span>
         </a>
-        <p>Web, AI and embedded engineering from Georgia. Makers of Unira.</p>
+        <p>{{ footer.blurb }}</p>
       </div>
 
       <nav class="footer__col" aria-label="Site">
@@ -29,30 +29,25 @@ const year = new Date().getFullYear()
       <nav class="footer__col" aria-label="Elsewhere">
         <h3>Elsewhere</h3>
         <ul>
-          <li>
-            <a :href="links.uniraReleases" target="_blank" rel="noopener">Unira releases</a>
-          </li>
-          <li>
-            <a :href="links.github" target="_blank" rel="noopener">GitHub</a>
-          </li>
+          <li><a :href="links.uniraReleases" target="_blank" rel="noopener">Unira releases</a></li>
+          <li><a :href="links.github" target="_blank" rel="noopener">GitHub</a></li>
         </ul>
       </nav>
     </div>
 
     <div class="container footer__bottom">
       <p>© {{ year }} Softspark. All rights reserved.</p>
-      <p class="footer__made">Built in Georgia 🇬🇪</p>
+      <p>Georgia</p>
     </div>
   </footer>
 </template>
 
 <style scoped>
 .footer {
-  background: var(--ink-950);
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--line);
   padding-block: var(--space-10) var(--space-6);
-  color: var(--text-muted);
   font-size: var(--text-sm);
+  color: var(--text-muted);
 }
 
 .footer__inner {
@@ -71,50 +66,49 @@ const year = new Date().getFullYear()
   align-items: center;
   gap: var(--space-3);
   color: var(--text);
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.02em;
 }
 
 .footer__brand p {
   margin-top: var(--space-4);
-  max-width: 24rem;
+  max-width: 22rem;
 }
 
 .footer__col h3 {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: 0.14em;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-faint);
-  font-weight: 500;
   margin-bottom: var(--space-4);
 }
 
 .footer__col ul {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-1);
 }
 
 .footer__col a {
-  color: var(--paper-200);
-  transition: color 0.2s var(--ease-out);
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  color: var(--text);
+  transition: color var(--dur) var(--ease);
 }
 
 .footer__col a:hover {
-  color: var(--ember-400);
+  color: var(--accent);
 }
 
 .footer__bottom {
   margin-top: var(--space-10);
   padding-top: var(--space-5);
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--line);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: var(--space-3);
-  font-size: var(--text-xs);
   color: var(--text-faint);
 }
 </style>
