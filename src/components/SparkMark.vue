@@ -11,12 +11,12 @@ defineProps<{ size?: number }>()
     focusable="false"
     class="spark-mark"
   >
-    <rect width="64" height="64" rx="14" fill="var(--ink-700)" />
+    <rect width="64" height="64" rx="14" fill="var(--ink)" />
     <path
       d="M32 10 C34 22 38 26 50 30 C38 34 34 38 32 50 C30 38 26 34 14 30 C26 26 30 22 32 10 Z"
-      fill="var(--ember-500)"
+      fill="var(--paper)"
     />
-    <circle cx="32" cy="30" r="5" fill="var(--ember-300)" />
+    <circle cx="32" cy="30" r="5" fill="var(--ember)" />
   </svg>
 </template>
 
