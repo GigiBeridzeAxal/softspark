@@ -15,24 +15,41 @@ export const navLinks: NavLink[] = [
   { label: 'About', href: '#about' },
 ]
 
+export const cta = {
+  primary: 'Start a project',
+} as const
+
+export const hero = {
+  eyebrow: 'Software studio · Georgia',
+  title: 'Web, AI and embedded engineering, built with care.',
+  lede:
+    'Softspark is a software studio and tech hub in Georgia, the country. We design and build web apps, train and evaluate AI models, and write the software that runs on devices.',
+  secondary: 'See Unira',
+} as const
+
 export interface Service {
   id: string
   index: string
   title: string
   summary: string
   points: string[]
-  icon: 'web' | 'ai' | 'embedded'
 }
+
+export const servicesHead = {
+  eyebrow: 'Services',
+  title: 'Three disciplines under one roof.',
+  lede:
+    'Most products touch more than one layer. We staff the web, model and device work together so it is designed as one system.',
+} as const
 
 export const services: Service[] = [
   {
     id: 'web',
     index: '01',
-    title: 'Custom websites & web apps',
+    title: 'Websites & web apps',
     summary:
-      'Marketing sites, dashboards and full product front-ends built on modern frameworks, tuned for speed and maintainability.',
-    points: ['Vue, React & TypeScript', 'Design systems & accessibility', 'Performance, SEO & hosting setup'],
-    icon: 'web',
+      'Marketing sites, dashboards and full product front-ends on modern frameworks, tuned for speed and long-term maintainability.',
+    points: ['Vue, React and TypeScript', 'Design systems and accessibility', 'Performance, SEO and hosting'],
   },
   {
     id: 'ai',
@@ -40,64 +57,81 @@ export const services: Service[] = [
     title: 'AI model training & ML consulting',
     summary:
       'From dataset strategy to fine-tuning and evaluation, we help teams ship models that behave predictably in production.',
-    points: ['Fine-tuning & evaluation pipelines', 'LLM agents, tooling & orchestration', 'MLOps and deployment guidance'],
-    icon: 'ai',
+    points: ['Fine-tuning and evaluation pipelines', 'LLM agents, tooling and orchestration', 'MLOps and deployment guidance'],
   },
   {
     id: 'embedded',
     index: '03',
-    title: 'Embedded systems & firmware-adjacent work',
+    title: 'Embedded & firmware-adjacent',
     summary:
       'Device software, hardware bring-up support and the tooling that connects microcontrollers to the cloud.',
-    points: ['MCU firmware & drivers', 'Device tooling, flashing & telemetry', 'Edge integration with web & AI stacks'],
-    icon: 'embedded',
+    points: ['MCU firmware and drivers', 'Flashing, telemetry and device tooling', 'Edge integration with web and AI stacks'],
   },
 ]
 
-export interface UniraFeature {
+export interface Feature {
   title: string
   body: string
 }
 
-export const uniraFeatures: UniraFeature[] = [
-  {
-    title: 'Visible by design',
-    body: 'Every agent, prompt and terminal session is on screen. Nothing happens behind a spinner.',
-  },
-  {
-    title: 'Workflow-driven',
-    body: 'Define stages such as plan, implement, review and test. Unira routes the work through them in order.',
-  },
-  {
-    title: 'CLI-native teams',
-    body: 'Orchestrates the AI coding CLIs you already use, side by side, instead of replacing them.',
-  },
-  {
-    title: 'Desktop, local-first',
-    body: 'Runs on your machine next to your repositories. Your code stays where it lives.',
-  },
-]
+export const unira = {
+  eyebrow: 'Product',
+  title: 'Unira. AI coding teams you can see.',
+  lede:
+    'Unira is a desktop orchestrator for workflow-driven teams of AI coding CLIs. Define the stages, assign an agent to each, and watch every one work in its own visible session.',
+  primary: 'Download from GitHub',
+  secondary: 'Release notes',
+  features: [
+    {
+      title: 'Visible by design',
+      body: 'Every agent, prompt and session is on screen. Nothing happens behind a spinner.',
+    },
+    {
+      title: 'Workflow-driven',
+      body: 'Stages like plan, implement, review and test. Unira routes work through them in order.',
+    },
+    {
+      title: 'Local and CLI-native',
+      body: 'Runs on your machine next to your repositories and orchestrates the CLIs you already use.',
+    },
+  ] as Feature[],
+  /* Illustrative stages shown in the product frame. */
+  stages: [
+    { name: 'Plan', state: 'done' },
+    { name: 'Implement', state: 'active' },
+    { name: 'Review', state: 'queued' },
+    { name: 'Test', state: 'queued' },
+  ] as { name: string; state: 'done' | 'active' | 'queued' }[],
+} as const
 
-export interface Principle {
-  title: string
-  body: string
-}
+export const about = {
+  eyebrow: 'About',
+  title: 'A small studio in Georgia, working across the whole stack.',
+  lede:
+    'Softspark is based in Georgia, between the Black Sea and the Caucasus. We work with founders, product teams and hardware makers who want thoughtful engineering rather than the fastest possible prototype.',
+  principles: [
+    {
+      title: 'Craft over churn',
+      body: 'We would rather ship one well-built system than three fragile ones. Code is read far more than it is written.',
+    },
+    {
+      title: 'One team across layers',
+      body: 'Web, machine learning and embedded rarely live in one shop. Here they share a hallway, so problems get solved end to end.',
+    },
+    {
+      title: 'Tools we use ourselves',
+      body: 'Unira exists because we wanted it for our own work. Everything we release has to earn its place in our daily workflow first.',
+    },
+  ] as Feature[],
+} as const
 
-export const principles: Principle[] = [
-  {
-    title: 'Craft over churn',
-    body: 'We would rather ship one well-built system than three fragile ones. Code is read far more than it is written.',
-  },
-  {
-    title: 'Engineering across the stack',
-    body: 'Web, machine learning and embedded rarely live in one shop. Here they share a hallway, and problems get solved end to end.',
-  },
-  {
-    title: 'Rooted in Georgia',
-    body: 'A tech hub for engineers in Georgia who want to build ambitious products locally and work with teams around the world.',
-  },
-  {
-    title: 'Tools we use ourselves',
-    body: 'Unira exists because we wanted it for our own work. Everything we release has to earn its place in our daily workflow first.',
-  },
-]
+export const contact = {
+  eyebrow: 'Contact',
+  title: 'Tell us what you are building.',
+  lede: 'We reply with an honest read on scope, approach and where Softspark can help.',
+  email: 'hello@softspark.ge',
+} as const
+
+export const footer = {
+  blurb: 'Web, AI and embedded engineering from Georgia. Makers of Unira.',
+} as const
