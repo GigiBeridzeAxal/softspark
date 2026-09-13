@@ -65,9 +65,19 @@ The dev server prints a local URL (usually `http://localhost:5173`).
 
 ### Design system
 
-Design tokens live in `src/assets/styles.css` under `:root`. The palette is warm ember and amber
-on deep ink, with an off-white paper tone for type. Typography uses Fraunces for headings, Inter
-for body copy and JetBrains Mono for labels, loaded from Google Fonts with system fallbacks.
+Design tokens live in `src/assets/styles.css` under `:root`. The system is deliberately small:
+
+- **Palette:** near-white paper background (`--paper`), deep ink text (`--ink`) and a single ember
+  accent (`--ember`, used for the primary button, the active state in the Unira frame and focus
+  rings). Borders are 1px hairlines at low alpha; surfaces are flat.
+- **Type:** Inter only, in three weights (400, 500, 600), loaded from Google Fonts with system
+  fallbacks. Headings use weight contrast and tight tracking rather than a second family.
+- **Rhythm:** sections use `--section-y` (80–120px) and a `--prose` measure of 38rem for ledes.
+- **Motion:** 300ms fade/slide on scroll-reveal and hero entrance only, disabled under
+  `prefers-reduced-motion`.
+
+Each section carries one idea: hero (who, what, one CTA), services (three pillars), Unira
+(product spotlight with one quiet frame), about (studio principles), contact band, footer.
 
 Section content (service descriptions, Unira feature list, about principles, external links) is
 kept in `src/data/site.ts` so copy changes don't require touching component markup.
