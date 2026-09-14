@@ -40,13 +40,17 @@ The dev server prints a local URL (usually `http://localhost:5173`).
 ├── index.html                 # HTML shell, meta tags, font links
 ├── design-import/             # Source design doc for the current direction
 ├── public/
-│   └── favicon.svg
+│   ├── favicon.svg            # Spark mark on a dark tile
+│   └── brand/                 # Raster exports of the mark (light and dark)
 ├── src/
 │   ├── main.ts                # App bootstrap
 │   ├── App.vue                # Page composition (nav, sections, footer)
 │   ├── assets/
-│   │   └── styles.css         # Design tokens, reset, shared primitives
+│   │   ├── styles.css         # Design tokens, reset, shared primitives
+│   │   └── brand/
+│   │       └── softspark-mark.svg  # Source of the mark, currentColor
 │   ├── components/
+│   │   ├── BrandMark.vue      # Inline SVG of the mark, sized by prop
 │   │   ├── SiteNav.vue        # Fixed nav over the hero, mobile sheet
 │   │   ├── HeroSection.vue    # Full-bleed hero over the film placeholder
 │   │   ├── ServicesSection.vue# Centred statement + three disciplines
@@ -109,6 +113,22 @@ closing line and footer.
 
 Section content (discipline copy, the numbers, studio principles, placeholder captions, external
 links) is kept in `src/data/site.ts` so copy changes don't require touching component markup.
+
+## Brand
+
+The Softspark mark is a six-spoke spark: three rounded strokes through one centre. It is
+monochrome and takes the colour of the text next to it, so it needs no accent hue.
+
+- `src/assets/brand/softspark-mark.svg` is the source drawing (currentColor, 100 x 100 viewBox).
+- `src/components/BrandMark.vue` inlines it for the nav lockup, the hero watermark and the
+  footer. Pass `size` (px or any CSS length) and `weight` (stroke width in viewBox units; use
+  12 at small sizes so the strokes stay legible).
+- `public/favicon.svg` is the mark in paper on an ink tile with rounded corners.
+- `public/brand/softspark-mark-light.png` (ink on paper) and `softspark-mark-dark.png` (paper
+  on ink) are 546 x 546 exports for places that need a raster, such as the Apple touch icon
+  and the Open Graph image.
+
+Keep the mark to the left of the wordmark, on the text baseline, and never recolour it.
 
 ## Deployment
 

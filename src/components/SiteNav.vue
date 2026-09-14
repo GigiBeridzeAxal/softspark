@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { contact, links, navLinks } from '@/data/site'
+import BrandMark from '@/components/BrandMark.vue'
 
 const scrolled = ref(false)
 const open = ref(false)
@@ -51,7 +52,10 @@ onBeforeUnmount(() => {
 <template>
   <header class="nav" :class="{ 'nav--scrolled': scrolled, 'nav--open': open }">
     <div class="shell nav__inner">
-      <a href="#top" class="nav__brand" aria-label="Softspark home" @click="close">Softspark</a>
+      <a href="#top" class="nav__brand" aria-label="Softspark home" @click="close">
+        <BrandMark :size="18" :weight="12" />
+        <span>Softspark</span>
+      </a>
 
       <nav class="nav__links" aria-label="Primary">
         <ul>
@@ -139,9 +143,11 @@ onBeforeUnmount(() => {
   gap: var(--space-6);
 }
 
+/* Mark then wordmark, one lockup; the mark takes the type colour. */
 .nav__brand {
   display: inline-flex;
   align-items: center;
+  gap: 0.625rem;
   min-height: 2.75rem;
   font-size: 0.875rem;
   font-weight: 600;

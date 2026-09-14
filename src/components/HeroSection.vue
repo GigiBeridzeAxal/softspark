@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { cta, hero, links } from '@/data/site'
+import BrandMark from '@/components/BrandMark.vue'
 </script>
 
 <template>
@@ -7,6 +8,8 @@ import { cta, hero, links } from '@/data/site'
     <!-- Stand-in for the hero film: a panning hatch under a scrim. -->
     <div class="hero__film" aria-hidden="true">
       <div class="hero__hatch"></div>
+      <!-- The mark sits in the film as a faint watermark, under the scrim. -->
+      <BrandMark class="hero__mark" size="100%" :weight="7" />
       <div class="hero__scrim"></div>
       <p class="hero__film-note slot-note">{{ hero.media }}</p>
     </div>
@@ -53,6 +56,19 @@ import { cta, hero, links } from '@/data/site'
   inset: 0;
   background: var(--hatch-band);
   animation: pan 24s ease-in-out infinite alternate;
+}
+
+/* A ghost of the mark, right of centre, that the scrim fades into the film. */
+.hero__mark {
+  position: absolute;
+  top: 50%;
+  right: clamp(1rem, 8vw, 9rem);
+  width: clamp(16rem, 38vw, 34rem);
+  height: auto;
+  aspect-ratio: 1;
+  transform: translateY(-54%);
+  color: rgb(var(--paper-rgb) / 0.085);
+  animation: fade-in var(--dur-enter) 200ms var(--ease-out) both;
 }
 
 /* Lifts the type off the film and lands the section in solid ink. */
@@ -153,6 +169,14 @@ import { cta, hero, links } from '@/data/site'
 @media (max-width: 47.99rem) {
   .hero__film-note {
     display: none;
+  }
+  /* Smaller screens: park it high and half off the right edge, clear of the headline. */
+  .hero__mark {
+    top: calc(var(--nav-h) + var(--space-4));
+    right: -6rem;
+    width: 16rem;
+    transform: none;
+    color: rgb(var(--paper-rgb) / 0.07);
   }
 }
 </style>
