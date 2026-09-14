@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { footer, links } from '@/data/site'
+import BrandMark from '@/components/BrandMark.vue'
 
 const year = new Date().getFullYear()
 </script>
@@ -7,7 +8,10 @@ const year = new Date().getFullYear()
 <template>
   <footer class="footer">
     <div class="shell footer__inner">
-      <p class="label footer__place">© {{ year }} {{ footer.place }}</p>
+      <p class="label footer__place">
+        <BrandMark :size="14" :weight="12" />
+        <span>© {{ year }} {{ footer.place }}</span>
+      </p>
 
       <nav class="footer__links" aria-label="Elsewhere">
         <a class="label" :href="links.uniraReleases" target="_blank" rel="noopener">
@@ -35,6 +39,9 @@ const year = new Date().getFullYear()
 }
 
 .footer__place {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
   letter-spacing: 0.1em;
 }
 
